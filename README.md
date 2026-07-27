@@ -14,16 +14,6 @@ HannaBeads is a cozy crafting game where players:
 
 Storylines are narrative arcs where characters share their story across 5-10 commissions. Each commission is a personal message from the character, explaining their story while asking for a specific craft.
 
-## What Does This Skill Do?
-
-Given a **story summary** and a **starting reputation score**, this skill produces:
-
-| Output | Description |
-|--------|-------------|
-| **Commission list** | 5-10 fully detailed commission objects with IDs, names, descriptions, pattern axes, colors, payouts, reputation gates, and deadlines |
-| **Pattern JSONs** | Engine-ready pattern data for importing into the game (grid sizes, color palettes, variant definitions) |
-| **Pattern briefs** | Human-readable markdown documents for the pixelartist (design notes, color specs, variant details) |
-
 ## Key Concepts
 
 ### Required Axes (not Required Pattern)
@@ -99,6 +89,16 @@ Reputation is the **central progression metric** in HannaBeads. It affects nearl
 | Mid game | 30-50 | 1.3x - 1.5x | 50% more coins. Full color palette. Moderate-complex patterns available. |
 | Late game | 60-80 | 1.6x - 1.8x | Near-double payouts. All patterns unlocked. Composite patterns available. |
 | Endgame | 90-100 | 1.9x - 2.0x | Double payouts. All storylines complete. Full workshop. |
+
+## What Does This Skill Do?
+
+Given a **story summary** and a **starting reputation score**, this skill produces:
+
+| Output | Description |
+|--------|-------------|
+| **Commission list** | 5-10 fully detailed commission objects with IDs, names, descriptions, pattern axes, colors, payouts, reputation gates, and deadlines |
+| **Pattern JSONs** | Engine-ready pattern data for importing into the game (grid sizes, color palettes, variant definitions) |
+| **Pattern briefs** | Human-readable markdown documents for the pixelartist (design notes, color specs, variant details) |
 
 ## How to Use
 
