@@ -102,6 +102,25 @@ Given a **story summary** and a **starting reputation score**, this skill produc
 
 ## How to Use
 
+### Requirements
+
+[Claude Code](https://docs.claude.com/en/docs/claude-code/overview),
+installed and authenticated.
+
+### Setup
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/GixGosu/gdd-review-kit.git
+   ```
+2. Open Claude Code in that folder.
+3. You get:
+   - `.claude/agents/` with four agent definitions (StoryWriter,
+     CommissionPlanner, PatternDesigner, EconomyBalancer)
+   - `.claude/skills/hannabeads-commission-pipeline/` with the pipeline
+     skill that orchestrates them
+   - `Storylines/` where output lands, one folder per storyline
+
 ### Input
 
 First invoke the skill with `/hannabeads-commission-pipeline`, then provide a story summary and starting reputation:
