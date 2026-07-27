@@ -111,7 +111,7 @@ installed and authenticated.
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/GixGosu/gdd-review-kit.git
+   git clone https://github.com/UzielSilva/maigd-agent-crew.git
    ```
 2. Open Claude Code in that folder.
 3. You get:
