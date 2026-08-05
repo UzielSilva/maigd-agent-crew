@@ -115,8 +115,8 @@ installed and authenticated.
    ```
 2. Open Claude Code in that folder.
 3. You get:
-   - `.claude/agents/` with four agent definitions (StoryWriter,
-     CommissionPlanner, PatternDesigner, EconomyBalancer)
+   - `.claude/agents/` with five agent definitions (StoryWriter,
+      StoryValidator, CommissionPlanner, PatternDesigner, EconomyBalancer)
    - `.claude/skills/hannabeads-commission-pipeline/` with the pipeline
      skill that orchestrates them
    - `Storylines/` where output lands, one folder per storyline
@@ -140,7 +140,7 @@ Starting reputation: 40
 The skill runs in 4 phases, each requiring your explicit approval:
 
 **Phase 1 — Story Review**
-The StoryWriter expands your summary into character messages with reputation gates and complexity hints. Review the narrative and approve or request changes.
+The StoryWriter expands your summary into character messages with reputation gates and complexity hints. The StoryValidator reviews the story for consistency issues (dialogue contradictions, timeline errors, character voice shifts) before it reaches you. Auto-fixable issues are corrected internally; complex issues are flagged for your review. Review the narrative and approve or request changes.
 
 **Phase 2 — Commission Plan Review**
 The CommissionPlanner and PatternDesigner collaborate to map story steps to pattern axes. If an axis gap is found, you decide how to resolve it. Once all axes are mapped, payouts are validated with the EconomyBalancer. Review the commission table and approve.
@@ -170,11 +170,12 @@ Storylines/
 
 ### The Crew
 
-Four agents collaborate through the pipeline, each with a specific role:
+Five agents collaborate through the pipeline, each with a specific role:
 
 | Agent | Purpose | Phase |
 |-------|---------|-------|
 | **StoryWriter** | Expands your story summary into character messages, splitting the narrative into 5-10 commission steps with complexity hints. Purely narrative — does not specify patterns, colors, or axes. | Phase 1 |
+| **StoryValidator** | Reviews the StoryWriter's output for consistency issues before it reaches you. Checks for dialogue contradictions, timeline errors, character voice shifts, narrative gaps, request/story misalignment, and copyright concerns. Auto-fixes obvious issues internally; flags complex ones for your review. | Phase 1 |
 | **CommissionPlanner** | Reads each story step and works with the PatternDesigner to translate it into pattern axes. Assembles commission objects with axes, colors, payouts, and deadlines. Validates payouts with the EconomyBalancer before presenting to the user. | Phase 2 |
 | **PatternDesigner** | Simplifies complex requests into base patterns, checks each against the axis taxonomy, and proposes Theme/Pattern/SubPattern axes. Creates engine-ready pattern JSONs and human-readable briefs for the pixelartist. Also decides on design choices like shading. | Phase 2, Phase 3 |
 | **EconomyBalancer** | Validates commission payouts against bead costs and progression stage. Ensures payouts are fair — not too generous for simple patterns, not too stingy for complex ones. Adjusts payouts when needed. | Phase 2 |

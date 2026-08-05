@@ -1,17 +1,18 @@
 ---
 name: hannabeads-commission-pipeline
-description: Use when generating a storyline commission pipeline for HannaBeads. Orchestrates StoryWriter, CommissionPlanner, EconomyBalancer, and PatternDesigner agents to produce commissions, patterns, and pattern briefs from a story summary.
+description: Use when generating a storyline commission pipeline for HannaBeads. Orchestrates StoryWriter, StoryValidator, CommissionPlanner, EconomyBalancer, and PatternDesigner agents to produce commissions, patterns, and pattern briefs from a story summary.
 ---
 
 # Skill: HannaBeads Commission Pipeline
 
-**Purpose:** Orchestrate four agents (StoryWriter, CommissionPlanner, EconomyBalancer, PatternDesigner) through an interactive, phase-gated pipeline to produce a complete storyline commission list with patterns and pattern briefs from a story summary.
+**Purpose:** Orchestrate five agents (StoryWriter, StoryValidator, CommissionPlanner, EconomyBalancer, PatternDesigner) through an interactive, phase-gated pipeline to produce a complete storyline commission list with patterns and pattern briefs from a story summary.
 
-**Agent invocation:** These four agents are defined in `.claude/agents/` and must be invoked with the Agent tool using these `subagent_type` values:
+**Agent invocation:** These five agents are defined in `.claude/agents/` and must be invoked with the Agent tool using these `subagent_type` values:
 
 | Agent name (used below) | subagent_type |
 |--------------------------|---------------|
 | StoryWriter | `story-writer` |
+| StoryValidator | `story-validator` |
 | CommissionPlanner | `commission-planner` |
 | EconomyBalancer | `economy-balancer` |
 | PatternDesigner | `pattern-designer` |
@@ -38,8 +39,11 @@ This pipeline runs in 4 phases. **Each phase requires explicit user approval bef
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  PHASE 1: Story Review                                      │
-│  StoryWriter expands story → Present to user → Approve?     │
-│  ↻ User requests changes → StoryWriter rethinks → Re-present│
+│  StoryWriter expands story → StoryValidator reviews         │
+│  ↻ AUTO_FIX issues? → StoryWriter rewrites → Re-validate   │
+│  ↻ FLAG_FOR_REVIEW issues? → noted in presentation         │
+│  ✓ Clean or flagged → Present to user → Approve?            │
+│  ↻ User requests changes → StoryWriter rethinks → Re-validate│
 │  ✓ User approves → Proceed to Phase 2                       │
 └─────────────────────────────────────────────────────────────┘
                             ↓
@@ -107,10 +111,10 @@ The user can request changes to:
 
 ## Phase 1: Story Review
 
-### Agent: StoryWriter
+### Agents: StoryWriter + StoryValidator
 
 **Input:** Story summary + starting reputation
-**Output:** Full story as character messages, split into 5-10 commissions
+**Output:** Full story as character messages, split into 5-10 commissions — validated for consistency
 
 #### System Identity
 You are a narrative designer for HannaBeads, a bead crafting simulator. You write warm, age-appropriate (10+) messages from commission clients. Your job is to take a story summary and expand it into a full narrative arc delivered as character messages, then split it into 5-10 commissions.
@@ -165,6 +169,96 @@ When the user requests a story change, you will receive the change as a natural 
 - No profanity, violence, or complex vocabulary above 8th-grade reading level
 - `requestSummary` must be a natural-language description (not pattern axes or color codes)
 
+#### System Identity — StoryValidator
+You are a narrative QA reviewer for HannaBeads. You review the StoryWriter's output for consistency issues before it reaches the user. You check for dialogue inconsistencies, timeline contradictions, character voice shifts, narrative gaps, request/story misalignment, and potential copyright concerns. You classify issues by severity: `AUTO_FIX` (StoryWriter can fix automatically) or `FLAG_FOR_REVIEW` (user decides). You do NOT rewrite the story — you report issues and their severity.
+
+#### Validation Loop (Internal — Phase 1)
+
+After the StoryWriter generates the story, the StoryValidator reviews it as an internal loop before presenting to the user:
+
+```
+StoryWriter generates story
+        ↓
+StoryValidator reviews (iteration 1)
+        ↓
+   ┌─ CLEAN? → Present to user
+   │
+   └─ ISSUES_FOUND?
+        │
+        ├─ AUTO_FIX issues exist?
+        │       ↓
+        │   Send fix instructions to StoryWriter
+        │       ↓
+        │   StoryWriter rewrites (full story)
+        │       ↓
+        │   StoryValidator re-reviews (iteration +1)
+        │       ↓
+        │   Max 3 iterations reached?
+        │       ├─ YES → Stop loop, present with remaining issues as FLAG_FOR_REVIEW
+        │       └─ NO → Check again (loop)
+        │
+        └─ Only FLAG_FOR_REVIEW issues?
+                ↓
+            Present to user with validation notes
+```
+
+**Max iterations:** 3. If AUTO_FIX issues persist after 3 rounds, they become FLAG_FOR_REVIEW.
+
+#### What StoryValidator Checks
+
+| Issue Type | Description | Severity Rules |
+|------------|-------------|----------------|
+| Dialogue Inconsistency | Character contradicts themselves across messages | Direct contradiction → AUTO_FIX; subtle shift → FLAG_FOR_REVIEW |
+| Timeline Contradiction | Events in impossible order or time refs don't add up | Impossible timeline → AUTO_FIX; ambiguous ref → FLAG_FOR_REVIEW |
+| Character Voice | Personality/tone/speaking style changes abruptly | Abrupt unexplained shift → AUTO_FIX; gradual evolution → FLAG_FOR_REVIEW |
+| Narrative Gap | References something that never happened | Reference to non-existent event → AUTO_FIX; implied off-screen event → FLAG_FOR_REVIEW |
+| Request/Story Misalignment | Craft request doesn't match what character is talking about | Clear mismatch → AUTO_FIX; loose connection → FLAG_FOR_REVIEW |
+| Copyright | Character names or plot too close to existing IP | Direct use of copyrighted names/terms → AUTO_FIX; generic similarity → FLAG_FOR_REVIEW |
+
+#### StoryValidator Output Schema
+
+```json
+{
+  "status": "CLEAN | ISSUES_FOUND",
+  "issues": [
+    {
+      "issueType": "DIALOGUE_INCONSISTENCY | TIMELINE_CONTRADICTION | CHARACTER_VOICE | NARRATIVE_GAP | REQUEST_MISALIGNMENT | COPYRIGHT",
+      "severity": "AUTO_FIX | FLAG_FOR_REVIEW",
+      "affectedSteps": [1, 3],
+      "description": "Clear description of the issue",
+      "evidence": "Exact quotes or references from the affected steps",
+      "suggestion": "Brief suggestion for how to fix (AUTO_FIX) or what to consider (FLAG_FOR_REVIEW)"
+    }
+  ],
+  "summary": "Human-readable summary",
+  "autoFixCount": 0,
+  "flaggedCount": 0
+}
+```
+
+#### What StoryWriter Receives (Fix Instructions)
+
+When the StoryValidator finds AUTO_FIX issues, the StoryWriter receives:
+
+```json
+{
+  "validationRound": 2,
+  "issues": [
+    {
+      "issueType": "DIALOGUE_INCONSISTENCY",
+      "affectedSteps": [1, 3],
+      "description": "Marco claims to have never met Sofia in step 1, but in step 3 he says Sofia told him something directly.",
+      "evidence": "Step 1: 'I've never met Sofia, but I hear she loves cats.' | Step 3: 'Sofia told me she wants a cat bead art.'",
+      "suggestion": "Change step 1 to imply Marco knows Sofia from a distance (classmate, not stranger) or remove the direct conversation in step 3."
+    }
+  ],
+  "originalStorySummary": "Marco wants to impress Sofia...",
+  "currentStory": { }
+}
+```
+
+The StoryWriter rewrites the full story and returns it. The StoryValidator re-reviews the complete output.
+
 #### Phase 1 Presentation Format
 
 When presenting Phase 1 output to the user, use this format:
@@ -175,6 +269,7 @@ When presenting Phase 1 output to the user, use this format:
 **Story Summary:** [Original story summary]
 **Starting Reputation:** [X]
 **Total Commissions:** [N]
+**Validation:** [CLEAN | X issues found and fixed | X issues flagged for review]
 
 ---
 
@@ -189,6 +284,16 @@ When presenting Phase 1 output to the user, use this format:
 
 ### Step 2: [Client Name] — [Request Summary]
 ...
+
+---
+
+### Validation Notes (if any FLAG_FOR_REVIEW issues)
+
+| # | Issue Type | Steps | Description |
+|---|------------|-------|-------------|
+| 1 | CHARACTER_VOICE | 2, 5 | [Description of flagged issue] |
+
+You can approve as-is or request changes to address these.
 
 ---
 
@@ -664,6 +769,7 @@ After saving, present the README.md summary to the user. The pipeline is complet
 | Rule | Description |
 |------|-------------|
 | **ID Referencing** | Agents reference each other's output using exact `id` fields. No renaming. |
+| **Phase 1 Validation** | After StoryWriter generates the story, StoryValidator reviews it for consistency. AUTO_FIX issues loop back to StoryWriter (max 3 iterations). FLAG_FOR_REVIEW issues are presented to the user alongside the story. |
 | **Phase 2 Collaboration** | CommissionPlanner reads story steps and describes visuals to PatternDesigner. PatternDesigner maps to axes and proposes base patterns. If axis gaps are detected, CommissionPlanner notifies the user. Once all axes are mapped, CommissionPlanner validates payouts with EconomyBalancer before presenting to the user. |
 | **Axis Gap Flow** | PatternDesigner simplifies requests into base patterns, checks each against axes. Missing elements reported as axis gaps → CommissionPlanner notifies user → user decides (revise, assume axis added, simplify, or skip) → pipeline pauses. |
 | **Payout Validation Loop** | CommissionPlanner proposes basePayout → EconomyBalancer validates against bead cost and progression stage → if flagged, CommissionPlanner adjusts payout |
@@ -687,9 +793,10 @@ When the user invokes this skill:
 
 1. **Confirm inputs** — verify the story summary and starting reputation are provided
 2. **Begin Phase 1** — run StoryWriter with the story summary
-3. **Present Phase 1 output** — show the full story for user review
-4. **Wait for user response** — handle approval or modification requests
-5. **Proceed through phases** — follow the approval gate flow
-6. **Save outputs** — after Phase 4 approval, save all files
+3. **Validate Phase 1** — run StoryValidator on StoryWriter output (internal loop, max 3 iterations)
+4. **Present Phase 1 output** — show the full story (with validation notes if any FLAG_FOR_REVIEW issues) for user review
+5. **Wait for user response** — handle approval or modification requests
+6. **Proceed through phases** — follow the approval gate flow
+7. **Save outputs** — after Phase 4 approval, save all files
 
 **Important:** Always present output and wait for user response before proceeding. Never skip phases or auto-advance without user approval.
