@@ -25,6 +25,10 @@ Use this skill when the user provides a story summary and wants to generate:
 - Pattern briefs (markdown) for the human pixelartist
 - Reputation gates for storyline progression
 
+## GDD Reference
+
+All GDD data used by this pipeline (color palette, Category taxonomy, pattern axes, complexity tiers, economy values, reputation system) is defined in [`GDD_Reference.md`](GDD_Reference.md) in this skill directory. **Agents must read this file before generating output.** When GDD_Reference.md conflicts with the main GDD (`Docs/docs/game-design/` pages), the main GDD wins — update GDD_Reference.md to match.
+
 ## Input Format
 
 The user provides:
@@ -774,9 +778,10 @@ After saving, present the README.md summary to the user. The pipeline is complet
 | **Axis Gap Flow** | PatternDesigner simplifies requests into base patterns, checks each against axes. Missing elements reported as axis gaps → CommissionPlanner notifies user → user decides (revise, assume axis added, simplify, or skip) → pipeline pauses. |
 | **Payout Validation Loop** | CommissionPlanner proposes basePayout → EconomyBalancer validates against bead cost and progression stage → if flagged, CommissionPlanner adjusts payout |
 | **Max Iterations** | Pattern mapping runs max 3 times per commission. Payout validation runs once per full commission list. If still rejected, flag for human review. |
-| **Color Consistency** | All agents use the same Artkal codes from the 30-color palette |
-| **Theme Taxonomy** | Theme axis must use this exact v1 enum set: ANIMALS, PLANTS_NATURE, FOOD_MEALS, GAMING_GEEK, SPACE_ASTRONOMY, MAGIC_MYSTIC, MUSIC_AUDIO, SHAPES_SYMBOLS. Post-v1 themes (FASHION_CLOTHING, EMOTIONS_FACES, LIFESTYLE_OBJECTS, SEASONAL_HOLIDAYS) are deferred. |
-| **Color Availability** | If `minReputationRequired` < 20, only starting colors. If >= 20, all 30 colors. |
+| **GDD Reference** | All GDD data (colors, categories, patterns, tiers, economy) is in `GDD_Reference.md`. Agents must read it before generating output. |
+| **Color Consistency** | All agents use the same Artkal codes from the 30-color palette (see GDD_Reference.md §1) |
+| **Theme Taxonomy** | Theme axis must use the v1 enum set defined in GDD_Reference.md §3. Post-v1 themes are deferred. |
+| **Color Availability** | If `minReputationRequired` < 20, only starting colors. If >= 20, all 30 colors. See GDD_Reference.md §2. |
 | **Max Colors at Low Rep** | If `minReputationRequired` < 20, max 3 colors regardless of complexity tier. Starting palette has only 5 colors, so even MODERATE-tier commissions are limited. |
 | **No Pattern Suggestions from StoryWriter** | StoryWriter provides natural-language requests only. CommissionPlanner and PatternDesigner determine pattern axes in Phase 2. |
 | **Progression Enforcement** | CommissionPlanner enforces complexity tiers via PatternDesigner. Simple commissions cannot use COMPLEX patterns. |

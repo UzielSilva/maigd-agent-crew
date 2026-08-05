@@ -18,59 +18,17 @@ HannaBeads is a first-person bead crafting simulator where players run a small H
 - A list of required bead colors with counts
 - Optional color variants (same pixelart, different palettes)
 
-### Bead Colors (Official 30-Color Palette)
+### Bead Colors
 
-| Code | Name | Category |
-|------|------|----------|
-| C01 | White | Neutral |
-| C02 | Black | Neutral |
-| C03 | Orange | Warm |
-| C05 | Red | Warm |
-| C07 | Pink | Warm |
-| C09 | Hot Pink | Warm |
-| C10 | Light Yellow | Warm |
-| C12 | Light Green | Cool |
-| C13 | Green | Cool |
-| C14 | Teal | Cool |
-| C15 | Dark Teal | Cool |
-| C17 | Bright Orange | Warm |
-| C19 | Light Blue | Cool |
-| C20 | Blue | Cool |
-| C21 | Dark Blue | Cool |
-| C22 | Salmon | Warm |
-| C23 | Tan | Warm |
-| C25 | Light Purple | Cool |
-| C26 | Purple | Cool |
-| C31 | Brown | Warm |
-| C32 | Dark Brown | Warm |
-| C33 | Gray | Neutral |
-| C34 | Dark Gray | Neutral |
-| C42 | Yellow | Warm |
-| C43 | Maroon | Warm |
-| C47 | Light Peach | Warm |
-| C51 | Cream | Warm |
-| C52 | Dark Purple | Cool |
-| C57 | Crimson | Warm |
-| C88 | Silver | Neutral |
-
-**Starting colors (5):** C01 (White), C02 (Black), C05 (Red), C20 (Blue), C42 (Yellow)
+**Read `GDD_Reference.md` §1 for the full 30-color Artkal palette.** Key rules:
+- Starting colors (5): C01 (White), C02 (Black), C05 (Red), C20 (Blue), C42 (Yellow)
+- Starting colors are free. All other colors must be purchased.
 
 ### Pattern Library Reference (v1)
 
-The v1 pattern library is defined in GDD Section 2.8.2b. It contains 48 base patterns (6 per theme, 8 themes). Each Pattern axis value (e.g., CAT) is a category — multiple specific patterns can share it (e.g., Cat Face, Cat Sleeping, Cat Sitting). The v1 list below shows the initial subjects, but you can propose additional ones within the same Pattern categories.
+**Read `GDD_Reference.md` §5 for the full v1 pattern library (48 patterns, 6 per theme).**
 
-| Theme | Pattern Axis | Example Subjects |
-|---|---|---|
-| ANIMALS | CAT, DOG, BIRD, BUNNY, FROG, BUTTERFLY | Cat Face, Cat Sleeping, Dog Sitting, Bird on Branch |
-| PLANTS_NATURE | FLOWER, MUSHROOM, CACTUS, TREE, SUNFLOWER, RAINBOW | Rose, Red Mushroom, Barrel Cactus, Oak Tree |
-| FOOD_MEALS | PIZZA, CUPCAKE, SUSHI, RAMEN BOWL, COFFEE CUP, ICE CREAM | Pizza Slice, Chocolate Cupcake, Salmon Roll |
-| GAMING_GEEK | GAME CONTROLLER, PIXEL HEART, ROBOT, D20 DIE, RUBIK'S CUBE, ARCADE CABINET | Retro Controller, 8-bit Heart, Cute Robot |
-| SPACE_ASTRONOMY | PLANET, ROCKET, STAR, MOON, ALIEN, ASTRONAUT | Saturn, Red Rocket, Crescent Moon, Green Alien |
-| MAGIC_MYSTIC | CRYSTAL BALL, WAND, POTION BOTTLE, DRAGON, UNICORN, SPELL BOOK | Glowing Wand, Fire Dragon, Open Spell Book |
-| MUSIC_AUDIO | GUITAR, MUSIC NOTE, HEADPHONES, MICROPHONE, VINYL RECORD, DRUM | Acoustic Guitar, Eighth Note, Vinyl Record |
-| SHAPES_SYMBOLS | HEART, STAR, LIGHTNING BOLT, DIAMOND, ARROW, SNOWFLAKE | Pixel Heart, Gold Diamond, Six-fold Snowflake |
-
-Many patterns support color variants (one pixelart, multiple palettes). Use the GDD library as your starting point — propose new pattern subjects when a commission needs a specific design not in the library. Post-v1 themes (FASHION_CLOTHING, EMOTIONS_FACES, LIFESTYLE_OBJECTS, SEASONAL_HOLIDAYS) are in `Docs/GDD/Pattern_Ideas_Future.md`.
+The v1 pattern library contains 48 base patterns across 8 themes. Each Pattern axis value (e.g., CAT) is a category — multiple specific patterns can share it (e.g., Cat Face, Cat Sleeping, Cat Sitting). Use the GDD library as your starting point — propose new pattern subjects when a commission needs a specific design not in the library. Post-v1 themes are in `Docs/docs/reference/future-patterns.md`.
 
 ## Phase 2 Collaboration (PatternDesigner ↔ CommissionPlanner)
 
@@ -512,6 +470,8 @@ Cute, minimal style.
 7. All patterns are composable by default — no need to flag individually
 
 ## Color Selection Rules
+
+**Read `GDD_Reference.md` §2 for the full color availability rules.**
 
 ### For Commissions with minReputationRequired < 20
 - Only starting colors: C01, C02, C05, C20, C42

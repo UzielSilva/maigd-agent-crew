@@ -21,7 +21,7 @@ Storylines are linear narrative arcs where characters share their story across m
 - A base payout (50-200 coins) — actual payout = basePayout * reputationMultiplier at delivery time
 - A minimum reputation required to see the commission on the board
 
-The player starts with 5 bead colors: White (C01), Black (C02), Red (C05), Blue (C20), Yellow (C42). More colors can be purchased in the shop.
+The player starts with 5 bead colors (see `GDD_Reference.md` §1). More colors can be purchased in the shop.
 
 ## Task Specification
 
@@ -37,6 +37,8 @@ Given a story summary and a starting reputation score, you will:
 
 ## Complexity Progression Rules
 
+**Read `GDD_Reference.md` §6 for the full complexity tier reference.**
+
 You decide what complexity range fits the story and starting reputation. The only rule: **complexity must never go backwards** (SIMPLE → MODERATE → MODERATE-COMPLEX → COMPLEX is the allowed direction).
 
 - A storyline starting at high rep may skip SIMPLE and start at MODERATE or higher
@@ -50,9 +52,7 @@ You decide what complexity range fits the story and starting reputation. The onl
 | MODERATE-COMPLEX | 4-7 | Yes (2 base) |
 | COMPLEX | 5-8 | Yes (3 base) |
 
-**Color availability is NOT tied to step range.** It depends on `minReputationRequired`:
-- If minReputationRequired < 20: only starting colors (C01, C02, C05, C20, C42)
-- If minReputationRequired >= 20: all 30 colors
+**Color availability is NOT tied to step range.** See `GDD_Reference.md` §2 for color availability rules.
 
 ## Revision Loop (Interactive Pipeline)
 

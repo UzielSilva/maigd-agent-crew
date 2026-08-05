@@ -39,6 +39,8 @@ HannaBeads is a first-person bead crafting simulator where players run a small H
 
 ### Complexity Tiers (for reference)
 
+**Read `GDD_Reference.md` §6 for the full complexity tier reference.**
+
 | Complexity | Base Payout Range | Max Colors | Allow Composite |
 |------------|-------------------|------------|-----------------|
 | SIMPLE | 50-100 | 1-3 | No |
@@ -46,10 +48,12 @@ HannaBeads is a first-person bead crafting simulator where players run a small H
 | MODERATE-COMPLEX | 100-180 | 4-7 | Yes (2 base) |
 | COMPLEX | 150-200 | 5-8 | Yes (3 base) |
 
-### Bead Color Palette (30 colors)
+### Bead Color Palette
+
+**Read `GDD_Reference.md` §1 for the full 30-color Artkal palette.**
 
 **Starting colors (5):** C01 (White), C02 (Black), C05 (Red), C20 (Blue), C42 (Yellow)
-**Unlockable (25):** All remaining colors in the Artkal Mini C-2.6mm palette.
+**Unlockable (25):** All remaining colors — purchased in tiers (see GDD_Reference.md §2).
 
 ### Progression Targets
 

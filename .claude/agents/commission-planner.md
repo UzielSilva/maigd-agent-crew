@@ -23,42 +23,11 @@ HannaBeads is a first-person bead crafting simulator where players run a small H
 
 **Note:** Reputation reward is NOT set per commission. It is calculated at delivery time based on the **craft complexity** of what the player actually delivers (bead count + color count). Players can go above and beyond the requested pattern to increase craft complexity and earn more reputation (1-5 pts scale).
 
-### Bead Colors (Official 30-Color Palette)
+### Bead Colors
 
-| Code | Name | RGB | Category |
-|------|------|-----|----------|
-| C01 | White | 255,255,255 | Neutral |
-| C02 | Black | 0,0,0 | Neutral |
-| C03 | Orange | 246,176,76 | Warm |
-| C05 | Red | 225,6,0 | Warm |
-| C07 | Pink | 241,167,220 | Warm |
-| C09 | Hot Pink | 219,33,82 | Warm |
-| C10 | Light Yellow | 242,240,161 | Warm |
-| C12 | Light Green | 173,220,145 | Cool |
-| C13 | Green | 135,216,57 | Cool |
-| C14 | Teal | 36,158,107 | Cool |
-| C15 | Dark Teal | 0,124,88 | Cool |
-| C17 | Bright Orange | 255,103,31 | Warm |
-| C19 | Light Blue | 65,182,230 | Cool |
-| C20 | Blue | 0,144,218 | Cool |
-| C21 | Dark Blue | 0,51,153 | Cool |
-| C22 | Salmon | 252,191,169 | Warm |
-| C23 | Tan | 204,153,102 | Warm |
-| C25 | Light Purple | 167,123,202 | Cool |
-| C26 | Purple | 160,94,181 | Cool |
-| C31 | Brown | 123,77,53 | Warm |
-| C32 | Dark Brown | 92,71,56 | Warm |
-| C33 | Gray | 155,155,155 | Neutral |
-| C34 | Dark Gray | 118,119,119 | Neutral |
-| C42 | Yellow | 250,224,83 | Warm |
-| C43 | Maroon | 165,0,52 | Warm |
-| C47 | Light Peach | 243,207,179 | Warm |
-| C51 | Cream | 252,251,205 | Warm |
-| C52 | Dark Purple | 74,31,135 | Cool |
-| C57 | Crimson | 188,4,35 | Warm |
-| C88 | Silver | 209,209,209 | Neutral |
-
-**Starting colors (5):** C01 (White), C02 (Black), C05 (Red), C20 (Blue), C42 (Yellow)
+**Read `GDD_Reference.md` §1 for the full 30-color Artkal palette.** Key rules:
+- Starting colors (5): C01 (White), C02 (Black), C05 (Red), C20 (Blue), C42 (Yellow)
+- Starting colors are free. All other colors must be purchased.
 
 ## Task Specification
 
@@ -272,6 +241,8 @@ During Phase 2 (Commission Plan Review), the user reviews your commission list a
 
 ## Complexity Tier Rules
 
+**Read `GDD_Reference.md` §6 for the full complexity tier reference.**
+
 The StoryWriter determines the complexity progression for each storyline. Complexity must never go backwards. The table below defines the constraints for each tier:
 
 | Complexity | Base Payout Range | Max Colors | Allow Composite |
@@ -284,6 +255,8 @@ The StoryWriter determines the complexity progression for each storyline. Comple
 **Note:** Reputation reward (1-5 pts) is determined at delivery time by craft complexity (bead count + color count of the delivered pattern), NOT set per commission. Players can earn more rep by delivering more than requested.
 
 ## Category Axes Taxonomy
+
+**Read `GDD_Reference.md` §3 (Category Taxonomy) and §4 (Subject Axis Taxonomy) for the full reference.**
 
 **Theme (v1 — 8):** ANIMALS, PLANTS_NATURE, FOOD_MEALS, GAMING_GEEK, SPACE_ASTRONOMY, MAGIC_MYSTIC, MUSIC_AUDIO, SHAPES_SYMBOLS. Post-v1: FASHION_CLOTHING, EMOTIONS_FACES, LIFESTYLE_OBJECTS, SEASONAL_HOLIDAYS.
 
@@ -303,6 +276,8 @@ The StoryWriter determines the complexity progression for each storyline. Comple
 > *Note: The Pattern axis is a category, not a specific design. Multiple pixelart patterns can share the same Pattern value (e.g., Cat Face, Cat Sleeping, Cat Sitting all use Pattern:CAT). The PatternDesigner proposes specific subjects within these categories.*
 
 ## Color Rules
+
+**Read `GDD_Reference.md` §2 for the full color availability rules.**
 
 The colors available for a commission depend on the `minReputationRequired`:
 
